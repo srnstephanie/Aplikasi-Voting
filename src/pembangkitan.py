@@ -1,0 +1,50 @@
+# Menu pembangkitan kunci publik dan kunci privat RSA
+import random
+
+def isPrime(number):
+    if(number < 2):
+        return False
+    else:
+        for i in range(2, number):
+            if((number % i)) == 0:
+                return False
+        return True
+
+def primeNumber(minRange, maxRange):
+    while True:
+        number = random.randint(minRange, maxRange)
+        if isPrime(number):
+            return number
+
+def gcd(a, b):
+	while b != 0:
+		a, b = b, a % b
+	return a
+
+def eValue(totient):
+    while True:
+        e = random.randint(1, totient)
+        if(gcd(e, totient)==1):
+            break
+    return e
+
+def dValue(e, totient):
+    d = 2
+    while(1):
+        if((d*e) % totient) == 1:
+            break
+        d += 1
+    return d
+
+def genPubPrivKey():
+    p = primeNumber(100, 500)
+    q = primeNumber(100, 500)
+
+    if (p != q):
+        n = p*q
+        totient = (p-1)*(q-1)
+        # PUBLIK KEY
+        e = eValue(totient)
+        # PRIVATE KEY
+        d = dValue(e, totient)
+        return (e, d, n)
